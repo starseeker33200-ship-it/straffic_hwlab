@@ -4,6 +4,7 @@ import pandas as pd
 import os
 from datetime import datetime
 from PIL import Image
+import urllib.request
 import io
 
 # 1. Page UI 구성 (사이드바 기본 펼침 설정)
@@ -53,11 +54,15 @@ def get_connection():
 init_db()
 
 # ----------------------------------------------------
-# 🖼️ 로고 이미지 안전 로딩
+# 🖼️ 로고 이미지 안전 로딩 (로컬 + GitHub URL 지원)
 # ----------------------------------------------------
+# 📌 GitHub에 업로드된 raw 이미지 URL (필요 시 본인의 GitHub ID/Repo명/브랜치로 주소 수정 가능)
+GITHUB_LOGO_URL = "https://raw.githubusercontent.com/USER_NAME/REPO_NAME/main/logo.jpg"
+
 IMAGE_DIR = r"C:\python"
 logo_loaded = False
 
+# 1. 로컬 C:\python 디렉토리 검색
 if os.path.exists(IMAGE_DIR):
     for filename in os.listdir(IMAGE_DIR):
         if filename.lower().startswith("logo"):
@@ -70,11 +75,27 @@ if os.path.exists(IMAGE_DIR):
             except Exception:
                 pass
 
+# 2. 상대 경로 logo.jpg 검색
 if not logo_loaded and os.path.exists("logo.jpg"):
     try:
         img = Image.open("logo.jpg")
         st.image(img, width=300)
         logo_loaded = True
+    except Exception:
+        pass
+
+# 3. GitHub에 올려둔 logo.jpg URL에서 직접 로딩 (로컬 파일 없을 시 자동 시도)
+if not logo_loaded:
+    try:
+        req = urllib.request.Request(
+            GITHUB_LOGO_URL, 
+            headers={'User-Agent': 'Mozilla/5.0'}
+        )
+        with urllib.request.urlopen(req) as response:
+            image_data = response.read()
+            img = Image.open(io.BytesIO(image_data))
+            st.image(img, width=300)
+            logo_loaded = True
     except Exception:
         pass
 
@@ -394,7 +415,7 @@ elif "🛠️ 부품 등록" in menu:
                         except sqlite3.IntegrityError:
                             st.error("이미 동일한 이름의 파트 넘버가 존재합니다.")
 
-                # 🗑️ 부품 삭제 섹션 (실수 방지 유연성 포함)
+                # 🗑️ 부품 삭제 섹션
                 st.divider()
                 st.markdown("#### 🗑️ 선택한 부품 삭제")
                 del_confirm = st.checkbox(f"⚠️ 정말로 [{selected_edit_pn}] 부품을 삭제하시겠습니까?")
