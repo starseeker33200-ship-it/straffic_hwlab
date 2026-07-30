@@ -57,7 +57,7 @@ init_db()
 # 🖼️ 로고 이미지 안전 로딩 (로컬 + GitHub URL 지원)
 # ----------------------------------------------------
 # 📌 GitHub에 업로드된 raw 이미지 URL (필요 시 본인의 GitHub ID/Repo명/브랜치로 주소 수정 가능)
-GITHUB_LOGO_URL = "https://raw.githubusercontent.com/USER_NAME/REPO_NAME/main/logo.jpg"
+GITHUB_LOGO_URL = "https://raw.githubusercontent.com/<GitHub_starseeker33200>/<straffic_hwlab>/main/logo.jpg"
 
 IMAGE_DIR = r"C:\python"
 logo_loaded = False
