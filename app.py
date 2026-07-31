@@ -104,7 +104,7 @@ st.markdown("""
         border-color: #E2E8F0 !important;
     }
 </style>
-""", unsafe_allow_globals=True)
+""", unsafe_allow_html=True)
 
 # DB 설정 및 테이블 초기화
 DB_FILE = "inventory.db"
@@ -195,7 +195,7 @@ st.markdown("""
     <div class="brand-title">HARDWARE R&D INVENTORY SYSTEM</div>
     <div class="brand-subtitle">연구소 HW팀 부품 통합 재고 추적 및 수량 관리 플랫폼</div>
 </div>
-""", unsafe_allow_globals=True)
+""", unsafe_allow_html=True)
 
 # 세션 상태 초기화
 if "is_admin" not in st.session_state:
@@ -278,10 +278,10 @@ if menu == "부품 검색 및 출고 처리":
     m2.metric("전체 재고 보유 수량", f"{total_qty:,} 개")
     m3.metric("안전재고 미달 품목", f"{low_stock:,} 종", delta_color="inverse")
 
-    st.markdown("<br>", unsafe_allow_globals=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # 부품 현황 데이터 테이블 카드
-    st.markdown('<div class="content-card"><div class="card-title">부품 재고 현황 및 검색</div>', unsafe_allow_globals=True)
+    st.markdown('<div class="content-card"><div class="card-title">부품 재고 현황 및 검색</div>', unsafe_allow_html=True)
     
     c_search, c_cat = st.columns([3, 1])
     with c_search:
@@ -367,10 +367,10 @@ if menu == "부품 검색 및 출고 처리":
                             st.rerun()
                         except sqlite3.IntegrityError:
                             st.error("동일한 이름의 파트 넘버가 이미 등록되어 있습니다.")
-    st.markdown('</div>', unsafe_allow_globals=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # 빠른 출고/입고 카드
-    st.markdown('<div class="content-card"><div class="card-title">실시간 입출고 반영</div>', unsafe_allow_globals=True)
+    st.markdown('<div class="content-card"><div class="card-title">실시간 입출고 반영</div>', unsafe_allow_html=True)
     if not df_components.empty:
         part_list = df_components["part_number"].tolist()
         
@@ -416,16 +416,16 @@ if menu == "부품 검색 및 출고 처리":
                         
                         st.session_state["modal_msg"] = f"[{selected_pn}] {trans_type} {trans_qty}개가 반영되었습니다. (최종 재고: {new_qty}개)"
                         st.rerun()
-    st.markdown('</div>', unsafe_allow_globals=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # 2. 부품 신규 등록 및 수정
 # ----------------------------------------------------
 elif menu == "부품 신규 등록 및 수정":
     if not st.session_state["is_admin"]:
-        st.markdown('<div class="content-card">', unsafe_allow_globals=True)
+        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.warning("해당 메뉴는 관리자 권한이 필요합니다. 사이드바에서 비밀번호 인증을 완료해주세요.")
-        st.markdown('</div>', unsafe_allow_globals=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
         reg_tab, edit_tab, excel_tab = st.tabs([
             "개별 신규 등록", 
@@ -435,7 +435,7 @@ elif menu == "부품 신규 등록 및 수정":
         
         # 1) 개별 등록
         with reg_tab:
-            st.markdown('<div class="content-card"><div class="card-title">신규 부품 마스터 등록</div>', unsafe_allow_globals=True)
+            st.markdown('<div class="content-card"><div class="card-title">신규 부품 마스터 등록</div>', unsafe_allow_html=True)
             with st.form("register_form"):
                 col1, col2 = st.columns(2)
                 with col1:
@@ -476,11 +476,11 @@ elif menu == "부품 신규 등록 및 수정":
                             st.rerun()
                         except sqlite3.IntegrityError:
                             st.error(f"이미 존재하는 파트 넘버입니다: {part_number}")
-            st.markdown('</div>', unsafe_allow_globals=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
         # 2) 개별 수정 및 삭제
         with edit_tab:
-            st.markdown('<div class="content-card"><div class="card-title">등록 부품 변경 및 완전 삭제</div>', unsafe_allow_globals=True)
+            st.markdown('<div class="content-card"><div class="card-title">등록 부품 변경 및 완전 삭제</div>', unsafe_allow_html=True)
             conn = get_connection()
             df_comp = pd.read_sql_query("SELECT * FROM components", conn)
             conn.close()
@@ -538,11 +538,11 @@ elif menu == "부품 신규 등록 및 수정":
                     conn.close()
                     st.session_state["modal_msg"] = f"부품 [{selected_edit_pn}]이 완전히 삭제되었습니다."
                     st.rerun()
-            st.markdown('</div>', unsafe_allow_globals=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
         # 3) 대량 업로드 / 다운로드
         with excel_tab:
-            st.markdown('<div class="content-card"><div class="card-title">대량 데이터 가져오기/내보내기</div>', unsafe_allow_globals=True)
+            st.markdown('<div class="content-card"><div class="card-title">대량 데이터 가져오기/내보내기</div>', unsafe_allow_html=True)
             col_dn, col_up = st.columns(2)
             
             with col_dn:
@@ -624,13 +624,13 @@ elif menu == "부품 신규 등록 및 수정":
                         
                 except Exception as e:
                     st.error(f"파일을 읽는 과정에서 오류가 발생했습니다: {e}")
-            st.markdown('</div>', unsafe_allow_globals=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # 3. 입출고 히스토리 조회
 # ----------------------------------------------------
 elif menu == "입출고 히스토리 조회":
-    st.markdown('<div class="content-card"><div class="card-title">전체 입출고 감사 기록 (Audit Log)</div>', unsafe_allow_globals=True)
+    st.markdown('<div class="content-card"><div class="card-title">전체 입출고 감사 기록 (Audit Log)</div>', unsafe_allow_html=True)
     
     conn = get_connection()
     df_tx = pd.read_sql_query("SELECT * FROM transactions ORDER BY id DESC", conn)
@@ -652,4 +652,4 @@ elif menu == "입출고 히스토리 조회":
             use_container_width=True,
             hide_index=True
         )
-    st.markdown('</div>', unsafe_allow_globals=True)
+    st.markdown('</div>', unsafe_allow_html=True)
