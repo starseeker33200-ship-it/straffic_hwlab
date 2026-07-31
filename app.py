@@ -26,17 +26,19 @@ st.markdown("""
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     
-# ----------------------------------------------------
-# 🏛️ 상단 브랜드 헤더 (타이틀만 깔끔하게 배치)
-# ----------------------------------------------------
-st.markdown("""
-<div style="padding: 0.5rem 0 1rem 0;">
-    <div class="brand-title">HARDWARE R&D INVENTORY SYSTEM</div>
-    <div class="brand-subtitle">연구소 HW팀 부품 통합 재고 추적 및 수량 관리 플랫폼</div>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("<hr style='margin-top: 0px; margin-bottom: 25px;'>", unsafe_allow_html=True)
+    /* 상단 통합 브랜드 헤더 (타이틀 전용) */
+    .brand-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #0F172A;
+        letter-spacing: -0.5px;
+        line-height: 1.2;
+    }
+    .brand-subtitle {
+        font-size: 0.95rem;
+        color: #64748B;
+        margin-top: 0.2rem;
+    }
 
     /* 사이드바 스타일링 */
     [data-testid="stSidebar"] {
@@ -139,12 +141,12 @@ def get_connection():
 init_db()
 
 # ----------------------------------------------------
-# 🖼️ 로고 이미지 안전 로딩 (로컬 + GitHub URL 지원)
+# 🖼️ 사이드바 전용 로고 이미지 안전 로딩
 # ----------------------------------------------------
 GITHUB_LOGO_URL = "https://raw.githubusercontent.com/USER_NAME/REPO_NAME/main/logo.jpg"
 IMAGE_DIR = r"C:\python"
 
-top_logo_img = None
+sidebar_logo_img = None
 
 # 1. 로컬 C:\python 디렉토리 검색
 if os.path.exists(IMAGE_DIR):
@@ -152,20 +154,20 @@ if os.path.exists(IMAGE_DIR):
         if filename.lower().startswith("logo"):
             full_path = os.path.join(IMAGE_DIR, filename)
             try:
-                top_logo_img = Image.open(full_path)
+                sidebar_logo_img = Image.open(full_path)
                 break
             except Exception:
                 pass
 
 # 2. 상대 경로 logo.jpg 검색
-if top_logo_img is None and os.path.exists("logo.jpg"):
+if sidebar_logo_img is None and os.path.exists("logo.jpg"):
     try:
-        top_logo_img = Image.open("logo.jpg")
+        sidebar_logo_img = Image.open("logo.jpg")
     except Exception:
         pass
 
 # 3. GitHub URL 로딩
-if top_logo_img is None:
+if sidebar_logo_img is None:
     try:
         req = urllib.request.Request(
             GITHUB_LOGO_URL, 
@@ -173,30 +175,23 @@ if top_logo_img is None:
         )
         with urllib.request.urlopen(req) as response:
             image_data = response.read()
-            top_logo_img = Image.open(io.BytesIO(image_data))
+            sidebar_logo_img = Image.open(io.BytesIO(image_data))
     except Exception:
         pass
 
-# 사이드바에도 동일 로고 표시
-if top_logo_img:
-    st.sidebar.image(top_logo_img, use_container_width=True)
+# 사이드바에만 로고 표시
+if sidebar_logo_img:
+    st.sidebar.image(sidebar_logo_img, use_container_width=True)
 
 # ----------------------------------------------------
-# 🏛️ 상단 브랜드 헤더 (로고 이미지 + 타이틀)
+# 🏛️ 상단 브랜드 헤더 (타이틀)
 # ----------------------------------------------------
-head_col1, head_col2 = st.columns([1, 6])
-
-with head_col1:
-    if top_logo_img:
-        st.image(top_logo_img, width=110)
-
-with head_col2:
-    st.markdown("""
-    <div style="padding-top: 5px;">
-        <div class="brand-title">HARDWARE R&D INVENTORY SYSTEM</div>
-        <div class="brand-subtitle">연구소 HW팀 부품 통합 재고 추적 및 수량 관리 플랫폼</div>
-    </div>
-    """, unsafe_allow_html=True)
+st.markdown("""
+<div style="padding: 0.5rem 0 1rem 0;">
+    <div class="brand-title">HARDWARE R&D INVENTORY SYSTEM</div>
+    <div class="brand-subtitle">연구소 HW팀 부품 통합 재고 추적 및 수량 관리 플랫폼</div>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("<hr style='margin-top: 0px; margin-bottom: 25px;'>", unsafe_allow_html=True)
 
