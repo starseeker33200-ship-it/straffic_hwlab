@@ -384,7 +384,7 @@ if menu == "부품 검색 및 출고 처리":
                 trans_type = st.radio("구분", ["출고 (-)", "입고 (+)"])
                 
             note = st.text_input("사유 / 프로젝트명", placeholder="예: 시제품 검증용 PCB 실장")
-            submit_btn = st.form_submit_button("입출고 트랜잭션 실행", type="primary", use_container_width=True)
+            submit_btn = st.form_submit_button("입출고 내용 등록", type="primary", use_container_width=True)
             
             if submit_btn:
                 if not user_name.strip():
