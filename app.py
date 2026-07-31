@@ -26,27 +26,17 @@ st.markdown("""
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     
-    /* 상단 통합 브랜드 헤더 (로고 + 타이틀) */
-    .brand-header-container {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        padding: 1rem 0rem 1.5rem 0rem;
-        border-bottom: 2px solid #E2E8F0;
-        margin-bottom: 2rem;
-    }
-    .brand-title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #0F172A;
-        letter-spacing: -0.5px;
-        line-height: 1.2;
-    }
-    .brand-subtitle {
-        font-size: 0.95rem;
-        color: #64748B;
-        margin-top: 0.2rem;
-    }
+# ----------------------------------------------------
+# 🏛️ 상단 브랜드 헤더 (타이틀만 깔끔하게 배치)
+# ----------------------------------------------------
+st.markdown("""
+<div style="padding: 0.5rem 0 1rem 0;">
+    <div class="brand-title">HARDWARE R&D INVENTORY SYSTEM</div>
+    <div class="brand-subtitle">연구소 HW팀 부품 통합 재고 추적 및 수량 관리 플랫폼</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("<hr style='margin-top: 0px; margin-bottom: 25px;'>", unsafe_allow_html=True)
 
     /* 사이드바 스타일링 */
     [data-testid="stSidebar"] {
